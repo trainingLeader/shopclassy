@@ -1,0 +1,174 @@
+.container-fluid {
+  position: relative;
+}
+
+// Contenedor de productos con animación de scroll
+.products-container {
+  position: relative;
+  min-height: 400px;
+}
+
+// Animación de entrada para el título
+.display-5 {
+  animation: titleSlideIn 0.8s ease-out;
+}
+
+@keyframes titleSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Contador de productos con animación
+.text-muted {
+  animation: fadeInUp 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Grid de productos con animación escalonada
+.row.g-4 {
+  animation: gridFadeIn 1s ease-out 0.4s both;
+}
+
+@keyframes gridFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+// Efecto de carga para productos
+.col-sm-6,
+.col-md-4,
+.col-lg-3 {
+  position: relative;
+  overflow: hidden;
+}
+
+// Skeleton loader para productos que están cargando
+.skeleton-card {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeletonLoading 1.5s infinite;
+  border-radius: 8px;
+  height: 400px;
+}
+
+@keyframes skeletonLoading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Efecto de parallax sutil en scroll
+.parallax-effect {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+// Animación de entrada para productos individuales
+.product-card-wrapper {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.product-card-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+// Efecto de hover en el grid
+.row.g-4:hover .col-sm-6:not(:hover) {
+  transform: scale(0.98);
+  transition: transform 0.3s ease;
+}
+
+// Responsive animations
+@media (max-width: 768px) {
+  .display-5 {
+    animation-duration: 0.6s;
+  }
+  
+  .text-muted {
+    animation-delay: 0.1s;
+  }
+  
+  .row.g-4 {
+    animation-delay: 0.2s;
+  }
+}
+
+@media (max-width: 576px) {
+  .display-5 {
+    animation-duration: 0.5s;
+  }
+  
+  .text-muted {
+    animation-delay: 0s;
+  }
+  
+  .row.g-4 {
+    animation-delay: 0.1s;
+  }
+}
+
+// Efecto de scroll suave
+html {
+  scroll-behavior: smooth;
+}
+
+// Optimización de rendimiento para animaciones
+.card,
+.btn,
+.product-image {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+// Efecto de profundidad en las tarjetas
+.card {
+  perspective: 1000px;
+}
+
+.card:hover {
+  transform: translateY(-5px) rotateX(2deg);
+}
+
+// Animación de carga para el modal de video
+.video-modal {
+  animation: modalSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes modalSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

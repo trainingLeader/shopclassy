@@ -1,0 +1,95 @@
+    <div class="card h-100">
+      <div class="position-relative">
+        <!-- Skeleton loader -->
+        <div class="skeleton-loader" *ngIf="showSkeleton">
+          <div class="skeleton-shimmer"></div>
+        </div>
+        
+        <!-- Imagen del producto con lazy loading -->
+        <img 
+          #productImage
+          [alt]="product.name"
+          class="card-img-top product-image"
+          [class.image-loaded]="imageLoaded"
+          [class.image-error]="imageError"
+          loading="lazy">
+        
+        <div class="position-absolute top-0 start-0 m-2">
+          <span class="category-badge">{{ product.category }}</span>
+        </div>
+        
+        <div class="position-absolute top-0 end-0 m-2" *ngIf="product.isOnSale">
+          <span class="badge bg-danger">SALE</span>
+        </div>
+        
+        <div class="position-absolute top-0 end-0 m-2 mt-5" *ngIf="!product.inStock">
+          <span class="badge bg-secondary">Out of Stock</span>
+        </div>
+        
+        <button class="btn btn-light position-absolute" 
+                style="top: 50%; right: 1rem; transform: translateY(-50%); opacity: 1;">
+          <i class="fas fa-heart"></i>
+        </button>
+        
+        <!-- Botón de video -->
+        <button class="btn btn-info position-absolute" 
+                style="top: 50%; right: 4rem; transform: translateY(-50%); opacity: 1;"
+                (click)="openVideoModal()"
+                *ngIf="product.videoUrl"
+                title="Ver video del producto">
+          <i class="fas fa-play"></i>
+        </button>
+      </div>
+      
+      <div class="card-body d-flex flex-column" 
+           (mouseenter)="onMouseEnter()"
+           (mouseleave)="onMouseLeave()">
+        <div class="mb-2">
+          <small class="text-muted">{{ product.brand }}</small>
+        </div>
+        
+        <h5 class="card-title flex-grow-1">{{ product.name }}</h5>
+        
+        <p class="card-text text-muted small">{{ product.description }}</p>
+        
+        <div class="mb-2">
+          <div class="d-flex align-items-center">
+            <div class="me-2">
+              <span *ngFor="let star of getStars(product.rating)" 
+                    class="text-warning">
+                <i class="fas fa-star"></i>
+              </span>
+              <span *ngFor="let star of getEmptyStars(product.rating)" 
+                    class="text-muted">
+                <i class="far fa-star"></i>
+              </span>
+            </div>
+            <small class="text-muted">({{ product.reviews }} reviews)</small>
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <span class="price-tag">{{ '$' + product.price }}</span>
+            <span class="original-price" *ngIf="product.originalPrice">
+              {{ '$' + product.originalPrice }}
+            </span>
+          </div>
+          <div *ngIf="product.isOnSale && product.originalPrice" class="text-success small">
+            Save {{ getSavingsPercentage() }}%
+          </div>
+        </div>
+        
+        <button 
+          class="btn btn-primary w-100"
+          [disabled]="!product.inStock">
+          <span *ngIf="product.inStock; else outOfStockText">
+            <i class="fas fa-cart-plus me-2"></i>
+            Add to Cart
+          </span>
+          <ng-template #outOfStockText>
+            Out of Stock
+          </ng-template>
+        </button>
+      </div>
+    </div>

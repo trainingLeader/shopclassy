@@ -1,0 +1,39 @@
+    <div class="container-fluid mt-5" id="products">
+      <div class="row mb-4">
+        <div class="col-12 text-center">
+          <h2 class="display-5 fw-bold mb-3">Our Products</h2>
+          <p class="text-muted">Showing {{ products.length }} products</p>
+        </div>
+      </div>
+      
+      <div class="row g-4 parallax-effect" *ngIf="products.length > 0; else noProducts">
+        <div 
+          class="col-sm-6 col-md-4 col-lg-3" 
+          *ngFor="let product of products; let i = index; trackBy: trackByProduct">
+          <app-product-card 
+            #productCard
+            [product]="product"
+            [animationDelay]="i * 100"
+            (openVideo)="onOpenVideo($event)">
+          </app-product-card>
+        </div>
+      </div>
+      
+      <ng-template #noProducts>
+        <div class="row">
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No products found</h4>
+            <p class="text-muted">Try adjusting your search or filters</p>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Modal de video -->
+    <app-video-preview
+      [videoUrl]="currentVideo.videoUrl"
+      [productName]="currentVideo.productName"
+      [isOpen]="showVideoModal"
+      (closeModal)="onCloseVideoModal()">
+    </app-video-preview>

@@ -1,0 +1,34 @@
+<div class="video-modal" *ngIf="isOpen" (click)="onBackdropClick($event)">
+  <div class="video-modal-content" (click)="onVideoClick($event)">
+    <div class="video-modal-header">
+      <h5 class="video-modal-title">{{ productName }}</h5>
+      <button 
+        type="button" 
+        class="btn-close" 
+        (click)="onClose()"
+        aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    
+    <div class="video-container">
+      <video 
+        [src]="videoUrl" 
+        controls 
+        autoplay
+        class="product-video"
+        preload="metadata">
+        Tu navegador no soporta la reproducción de video.
+      </video>
+    </div>
+    
+    <div class="video-modal-footer">
+      <button 
+        type="button" 
+        class="btn btn-secondary" 
+        (click)="onClose()">
+        Cerrar
+      </button>
+    </div>
+  </div>
+</div>

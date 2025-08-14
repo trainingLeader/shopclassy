@@ -1,0 +1,58 @@
+    <div class="container-fluid mt-4">
+      <div class="search-section">
+        <div class="row g-4 align-items-center">
+          <div class="col-md-6">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="fas fa-search"></i>
+              </span>
+              <input 
+                type="text" 
+                class="form-control" 
+                placeholder="Search products, brands, or categories..."
+                [(ngModel)]="searchQuery"
+                (input)="onSearchChange()">
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <select 
+              class="form-select"
+              [(ngModel)]="selectedCategory"
+              (change)="onCategoryChange()">
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{ category.name }} ({{ category.count }})
+              </option>
+            </select>
+          </div>
+          
+          <div class="col-md-2">
+            <select 
+              class="form-select"
+              [(ngModel)]="sortBy"
+              (change)="onSortChange()">
+              <option value="name">Name</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="rating">Rating</option>
+              <option value="popularity">Popularity</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="row mt-3">
+          <div class="col-12">
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge bg-primary rounded-pill" *ngIf="searchQuery">
+                Search: "{{ searchQuery }}"
+                <button class="btn-close btn-close-white ms-1" (click)="clearSearch()"></button>
+              </span>
+              <span class="badge bg-secondary rounded-pill" *ngIf="selectedCategory !== 'all'">
+                Category: {{ getCategoryName(selectedCategory) }}
+                <button class="btn-close btn-close-white ms-1" (click)="clearCategory()"></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

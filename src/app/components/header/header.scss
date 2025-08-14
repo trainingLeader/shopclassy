@@ -1,0 +1,401 @@
+// Header principal
+.navbar {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(0px);
+  
+  &:hover {
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  }
+  
+  // Efecto Glassmorphism al hacer scroll
+  &.glassmorphism {
+    background: rgba(244, 136, 202, 0.25);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg, 
+        rgba(244, 136, 202, 0.15) 0%, 
+        rgba(212, 165, 116, 0.15) 100%
+      );
+      border-radius: inherit;
+      z-index: -1;
+    }
+    
+    .navbar-brand {
+      color: #2c3e50 !important;
+      text-shadow: 0 0 30px rgba(44, 62, 80, 0.3);
+      font-weight: 800;
+    }
+    
+    .nav-link {
+      color: #343a40 !important;
+      font-weight: 600;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+      
+      &:hover {
+        color: #212529 !important;
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+    }
+    
+    .btn-outline-light {
+      border-color: rgba(44, 62, 80, 0.4);
+      color: #2c3e50;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      
+      &:hover {
+        background: rgba(44, 62, 80, 0.9);
+        border-color: rgba(44, 62, 80, 0.8);
+        color: #ffffff;
+        box-shadow: 0 4px 15px rgba(44, 62, 80, 0.3);
+      }
+    }
+
+    .navbar-toggler {
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2844, 62, 80, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+      }
+    }
+  }
+}
+
+// Logo/Brand
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #ffffff !important;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: scale(1.05);
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+}
+
+// Enlaces de navegación - CORRECCIÓN CRÍTICA
+.navbar-nav {
+  .nav-item {
+    margin: 0 0.5rem;
+    
+    .nav-link {
+      color: #000000;
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: 25px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: block !important; // Forzar visualización
+      opacity: 1 !important; // Forzar opacidad
+      visibility: visible !important; // Forzar visibilidad
+      
+      // Efecto de fondo deslizante
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+      }
+      
+      // Efecto de borde inferior
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #ffffff, #f0f0f0);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+      
+      // Estados hover
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        
+        &::before {
+          left: 100%;
+        }
+        
+        &::after {
+          width: 80%;
+        }
+      }
+      
+      // Estado activo
+      &.active {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateY(-1px);
+        
+        &::after {
+          width: 60%;
+        }
+      }
+      
+      // Efecto de presión al hacer click
+      &:active {
+        transform: translateY(0);
+        transition: all 0.1s ease;
+      }
+    }
+  }
+}
+
+// Botón de toggle para móvil
+.navbar-toggler {
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.05);
+  }
+  
+  &:focus {
+    box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+  }
+  
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.9%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+    transition: all 0.3s ease;
+  }
+
+  // Estado activo del toggle
+  &.navbar-toggler-active {
+    .navbar-toggler-icon {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+// CORRECCIÓN CRÍTICA: Asegurar que el menú se muestre correctamente
+.navbar-collapse {
+  // IMPORTANTE: Asegurar que el menú se muestre cuando está abierto
+  &.show {
+    display: block !important;
+    animation: slideDown 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  // IMPORTANTE: Asegurar que el menú se oculte cuando está cerrado
+  &.collapse:not(.show) {
+    display: none !important;
+  }
+
+  // Clase específica para menú móvil
+  &.mobile-menu {
+    @media (max-width: 991.98px) {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(244, 136, 202, 0.95);
+      border-radius: 0 0 15px 15px;
+      margin-top: 0;
+      padding: 1rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// Responsive para móviles
+@media (max-width: 991.98px) {
+  .navbar-nav {
+    .nav-item {
+      margin: 0.5rem 0;
+      opacity: 1 !important; // Forzar opacidad en móvil
+      transform: translateX(0); // Resetear transformación
+      animation: none; // Deshabilitar animación problemática
+      
+      .nav-link {
+        text-align: center;
+        padding: 1rem;
+        border-radius: 15px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: block !important; // Forzar visualización
+        opacity: 1 !important; // Forzar opacidad
+        visibility: visible !important; // Forzar visibilidad
+        
+        &:hover {
+          transform: translateX(5px);
+          background: rgba(255, 255, 255, 0.15);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        &.active {
+          background: rgba(255, 255, 255, 0.2);
+          transform: translateX(5px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+  
+  .navbar-collapse {
+    background: rgba(244, 136, 202, 0.95);
+    border-radius: 15px;
+    margin-top: 1rem;
+    padding: 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform-origin: top;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    // Animación de entrada
+    &.show {
+      animation: slideDown 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+
+    // Animación de salida
+    &.collapsing {
+      animation: slideUp 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+  }
+
+  // Mejorar visibilidad en móvil cuando es transparente
+  .navbar.glassmorphism .navbar-collapse {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(44, 62, 80, 0.2);
+    
+    .nav-link {
+      color: #343a40 !important;
+      font-weight: 600;
+      
+      &:hover {
+        background: rgba(44, 62, 80, 0.1);
+        color: #212529 !important;
+      }
+
+      &.active {
+        background: rgba(44, 62, 80, 0.15);
+        color: #212529 !important;
+      }
+    }
+  }
+
+  // Botones de acción móviles
+  .mobile-actions {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 1rem;
+    
+    .btn {
+      margin: 0.5rem 0;
+      width: 100%;
+      justify-content: center;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+@media (min-width: 992px) {
+	/* Forzar que el contenedor del menú esté visible en escritorio */
+	.navbar-collapse {
+		display: flex !important;
+		align-items: center;
+	}
+	.navbar-collapse.collapse:not(.show) {
+		display: flex !important;
+	}
+	/* Alinear lista y acciones en escritorio */
+	.navbar-nav {
+		display: flex;
+		flex-direction: row;
+	}
+	.mobile-actions {
+		flex-direction: row;
+		width: auto;
+		margin-top: 0;
+		.gap-2 { gap: .5rem; }
+	}
+}
+
+// Animaciones para menú móvil
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: scaleY(0) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scaleY(0) translateY(-20px);
+  }
+}
+
+// Efecto de partículas flotantes (opcional)
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px, 30px 30px, 40px 40px;
+  animation: float 20s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
