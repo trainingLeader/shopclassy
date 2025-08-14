@@ -223,6 +223,48 @@
   left: 100%;
 }
 
+// Botón de video
+.video-btn {
+  background: linear-gradient(135deg, #17a2b8, #138496);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: linear-gradient(135deg, #138496, #117a8b);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(23, 162, 184, 0.4);
+  }
+}
+
+// Botón de detalle
+.detail-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+  }
+}
+
+// Botón de like
+.heart-btn {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border: none;
+  color: #6c757d;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(108, 117, 125, 0.3);
+  }
+}
+
 // Responsive
 @media (max-width: 768px) {
   .product-image {

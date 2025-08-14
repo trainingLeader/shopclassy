@@ -14,7 +14,8 @@
             #productCard
             [product]="product"
             [animationDelay]="i * 100"
-            (openVideo)="onOpenVideo($event)">
+            (openVideo)="onOpenVideo($event)"
+            (openDetail)="onOpenDetail($event)">
           </app-product-card>
         </div>
       </div>
@@ -37,3 +38,11 @@
       [isOpen]="showVideoModal"
       (closeModal)="onCloseVideoModal()">
     </app-video-preview>
+
+    <!-- Modal de detalle del producto -->
+    <app-detail-product
+      [product]="currentProduct!"
+      [isOpen]="showDetailModal"
+      (closeModal)="onCloseDetailModal()"
+      *ngIf="currentProduct">
+    </app-detail-product>

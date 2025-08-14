@@ -1,1 +1,173 @@
-<p>detail-product works!</p>
+<!-- Modal de Detalle del Producto -->
+<div class="detail-modal-overlay" 
+     *ngIf="isOpen" 
+     (click)="close()"
+     [@fadeIn]>
+  
+  <div class="detail-modal" 
+       (click)="onModalClick($event)"
+       [@slideIn]>
+    
+    <!-- Header del Modal -->
+    <div class="modal-header">
+      <h3 class="modal-title">{{ product.name }}</h3>
+      <button class="close-btn" (click)="close()" aria-label="Close modal">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Contenido del Modal -->
+    <div class="modal-content">
+      
+      <!-- Galería de Imágenes -->
+      <div class="image-gallery">
+        <div class="main-image-container">
+          <img [src]="productImages[currentImageIndex]" 
+               [alt]="product.name + ' - Image ' + (currentImageIndex + 1)"
+               class="main-image">
+          
+          <!-- Navegación de imágenes -->
+          <button class="nav-btn prev-btn" 
+                  (click)="previousImage()"
+                  *ngIf="productImages.length > 1"
+                  aria-label="Previous image">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
+          <button class="nav-btn next-btn" 
+                  (click)="nextImage()"
+                  *ngIf="productImages.length > 1"
+                  aria-label="Next image">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+
+        <!-- Miniaturas -->
+        <div class="thumbnails" *ngIf="productImages.length > 1">
+          <button class="thumbnail" 
+                  *ngFor="let image of productImages; let i = index"
+                  [class.active]="i === currentImageIndex"
+                  (click)="selectImage(i)"
+                  [style.background-image]="'url(' + image + ')'"
+                  [attr.aria-label]="'Select image ' + (i + 1)">
+          </button>
+        </div>
+      </div>
+
+      <!-- Información del Producto -->
+      <div class="product-info">
+        
+        <!-- Marca y Categoría -->
+        <div class="product-meta">
+          <span class="brand">{{ product.brand }}</span>
+          <span class="category">{{ product.category }}</span>
+        </div>
+
+        <!-- Título y Descripción -->
+        <h2 class="product-title">{{ product.name }}</h2>
+        <p class="product-description">{{ product.description }}</p>
+
+        <!-- Rating y Reviews -->
+        <div class="rating-section">
+          <div class="stars">
+            <span *ngFor="let star of getStars(product.rating)" class="star filled">
+              <i class="fas fa-star"></i>
+            </span>
+            <span *ngFor="let star of getEmptyStars(product.rating)" class="star empty">
+              <i class="far fa-star"></i>
+            </span>
+          </div>
+          <span class="rating-text">{{ product.rating }}/5</span>
+          <span class="reviews">({{ product.reviews }} reviews)</span>
+        </div>
+
+        <!-- Precio -->
+        <div class="price-section">
+          <span class="current-price">${{ product.price }}</span>
+          <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+          <span class="discount-badge" *ngIf="product.isOnSale">
+            Save {{ getSavingsPercentage() }}%
+          </span>
+        </div>
+
+        <!-- Estado de Stock -->
+        <div class="stock-status" [class.out-of-stock]="!product.inStock">
+          <i class="fas" [class.fa-check-circle]="product.inStock" [class.fa-times-circle]="!product.inStock"></i>
+          <span>{{ product.inStock ? 'In Stock' : 'Out of Stock' }}</span>
+        </div>
+
+        <!-- Opciones de Talla -->
+        <div class="option-section" *ngIf="availableSizes.length > 0">
+          <label class="option-label">Size:</label>
+          <div class="option-buttons">
+            <button class="option-btn" 
+                    *ngFor="let size of availableSizes"
+                    [class.selected]="size === selectedSize"
+                    (click)="selectSize(size)">
+              {{ size }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Opciones de Color -->
+        <div class="option-section" *ngIf="availableColors.length > 0">
+          <label class="option-label">Color:</label>
+          <div class="option-buttons">
+            <button class="option-btn color-btn" 
+                    *ngFor="let color of availableColors"
+                    [class.selected]="color === selectedColor"
+                    (click)="selectColor(color)"
+                    [style.background-color]="color.toLowerCase()">
+              {{ color }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Cantidad -->
+        <div class="quantity-section">
+          <label class="option-label">Quantity:</label>
+          <div class="quantity-controls">
+            <button class="qty-btn" (click)="decreaseQuantity()" [disabled]="quantity <= 1">
+              <i class="fas fa-minus"></i>
+            </button>
+            <span class="quantity-display">{{ quantity }}</span>
+            <button class="qty-btn" (click)="increaseQuantity()" [disabled]="quantity >= 10">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="action-buttons">
+          <button class="btn btn-primary add-to-cart-btn" 
+                  (click)="addToCart()"
+                  [disabled]="!product.inStock">
+            <i class="fas fa-shopping-cart me-2"></i>
+            Add to Cart - ${{ (product.price * quantity).toFixed(2) }}
+          </button>
+          
+          <button class="btn btn-outline-secondary wishlist-btn">
+            <i class="fas fa-heart me-2"></i>
+            Add to Wishlist
+          </button>
+        </div>
+
+        <!-- Información Adicional -->
+        <div class="additional-info">
+          <div class="info-item">
+            <i class="fas fa-shipping-fast"></i>
+            <span>Free shipping on orders over $50</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-undo"></i>
+            <span>30-day return policy</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Secure payment</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

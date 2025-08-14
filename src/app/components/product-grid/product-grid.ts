@@ -4,11 +4,12 @@ import { Product } from '../../interfaces/product';
 import { ProductCard } from "../product-card/product-card";
 import { CommonModule } from '@angular/common';
 import { VideoPreview } from '../video-preview/video-preview';
+import { DetailProduct } from '../detail-product/detail-product';
 
 @Component({
   selector: 'app-product-grid',
   standalone: true,
-  imports: [CommonModule, ProductCard, VideoPreview],
+  imports: [CommonModule, ProductCard, VideoPreview, DetailProduct],
   templateUrl: './product-grid.html',
   styleUrl: './product-grid.scss'
 })
@@ -18,6 +19,8 @@ export class ProductGrid implements OnInit, AfterViewInit {
   
   showVideoModal = false;
   currentVideo = { videoUrl: '', productName: '' };
+  showDetailModal = false;
+  currentProduct: Product | null = null;
   animatedCards: Set<number> = new Set();
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
@@ -82,5 +85,15 @@ export class ProductGrid implements OnInit, AfterViewInit {
   onCloseVideoModal(): void {
     this.showVideoModal = false;
     this.currentVideo = { videoUrl: '', productName: '' };
+  }
+
+  onOpenDetail(product: Product): void {
+    this.currentProduct = product;
+    this.showDetailModal = true;
+  }
+
+  onCloseDetailModal(): void {
+    this.showDetailModal = false;
+    this.currentProduct = null;
   }
 }

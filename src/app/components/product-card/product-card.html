@@ -26,18 +26,26 @@
           <span class="badge bg-secondary">Out of Stock</span>
         </div>
         
-        <button class="btn btn-light position-absolute" 
+        <button class="btn btn-light position-absolute heart-btn" 
                 style="top: 50%; right: 1rem; transform: translateY(-50%); opacity: 1;">
           <i class="fas fa-heart"></i>
         </button>
         
         <!-- Botón de video -->
-        <button class="btn btn-info position-absolute" 
+        <button class="btn btn-info position-absolute video-btn" 
                 style="top: 50%; right: 4rem; transform: translateY(-50%); opacity: 1;"
                 (click)="openVideoModal()"
                 *ngIf="product.videoUrl"
                 title="Ver video del producto">
           <i class="fas fa-play"></i>
+        </button>
+
+        <!-- Botón de Ver Detalle -->
+        <button class="btn btn-primary position-absolute detail-btn" 
+                style="top: 50%; right: 7rem; transform: translateY(-50%); opacity: 1;"
+                (click)="openDetailModal()"
+                title="Ver detalle del producto">
+          <i class="fas fa-eye"></i>
         </button>
       </div>
       
