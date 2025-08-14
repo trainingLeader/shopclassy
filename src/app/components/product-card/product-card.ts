@@ -15,6 +15,7 @@ export class ProductCard implements OnInit, AfterViewInit {
   @Input() product!: Product;
   @Input() animationDelay: number = 0;
   @Output() openVideo = new EventEmitter<{videoUrl: string, productName: string}>();
+  @Output() openDetail = new EventEmitter<Product>();
   
   @ViewChild('productImage', { static: false }) productImage!: ElementRef<HTMLImageElement>;
   
@@ -127,6 +128,10 @@ export class ProductCard implements OnInit, AfterViewInit {
         productName: this.product.name
       });
     }
+  }
+
+  openDetailModal(): void {
+    this.openDetail.emit(this.product);
   }
 
   getStars(rating: number): number[] {
