@@ -206,4 +206,12 @@
       </div>
     </div>
   </div>
-</div> 
+</div>
+
+<!-- Modal de Rutinas de Hidratación -->
+<app-hydration-routine 
+  [isVisible]="showRoutineModal"
+  [routine]="selectedRoutine"
+  (closeRoutineEvent)="closeRoutineModal()"
+  (addToCartEvent)="addToCart($event)">
+</app-hydration-routine> 
