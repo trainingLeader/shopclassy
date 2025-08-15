@@ -1,0 +1,740 @@
+// Componente de Rutinas de Hidratación
+.hydration-routine-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+}
+
+.routine-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(15px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.routine-content {
+  background: white;
+  border-radius: 25px;
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.4s ease-out;
+  position: relative;
+}
+
+// Header de la Rutina
+.routine-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 35px 35px 25px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 25px 25px 0 0;
+  
+  .header-content {
+    flex: 1;
+    
+    .routine-badge {
+      display: inline-flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .routine-title {
+      margin: 0 0 10px 0;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    
+    .routine-subtitle {
+      margin: 0;
+      font-size: 18px;
+      opacity: 0.9;
+      font-weight: 300;
+      line-height: 1.4;
+    }
+  }
+  
+  .close-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1) rotate(90deg);
+    }
+    
+    i {
+      font-size: 20px;
+    }
+  }
+}
+
+// Información de la Rutina
+.routine-info {
+  padding: 30px 35px;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    
+    .info-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+      
+      .info-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+      }
+      
+      .info-content {
+        .info-label {
+          font-size: 12px;
+          color: #6c757d;
+          font-weight: 600;
+          text-transform: uppercase;
+          margin-bottom: 5px;
+        }
+        
+        .info-value {
+          font-size: 18px;
+          font-weight: 700;
+          color: #333;
+          
+          &.difficulty-beginner {
+            color: #28a745;
+          }
+          
+          &.difficulty-intermediate {
+            color: #ffc107;
+          }
+          
+          &.difficulty-advanced {
+            color: #dc3545;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Pasos de la Rutina
+.routine-steps {
+  padding: 35px;
+  
+  .steps-title {
+    margin: 0 0 30px 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    
+    i {
+      color: #667eea;
+    }
+  }
+  
+  .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    
+    .step-item {
+      display: flex;
+      gap: 20px;
+      padding: 25px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+      border: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+      animation: fadeInUp 0.6s ease-out forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+      }
+      
+      .step-number {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        font-weight: 700;
+        flex-shrink: 0;
+      }
+      
+      .step-content {
+        flex: 1;
+        
+        .step-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 15px;
+          
+          .step-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+          }
+          
+          .step-category-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            
+            &.category-morning {
+              background: linear-gradient(135deg, #ffd89b, #19547b);
+              color: white;
+            }
+            
+            &.category-evening {
+              background: linear-gradient(135deg, #667eea, #764ba2);
+              color: white;
+            }
+            
+            &.category-general {
+              background: linear-gradient(135deg, #f093fb, #f5576c);
+              color: white;
+            }
+          }
+        }
+        
+        .step-description {
+          margin: 0 0 15px 0;
+          color: #666;
+          line-height: 1.6;
+          font-size: 15px;
+        }
+        
+        .step-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          
+          .step-icon {
+            width: 35px;
+            height: 35px;
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+          }
+          
+          .step-skin-types {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            
+            .skin-type-badge {
+              padding: 4px 8px;
+              background: #e9ecef;
+              border-radius: 12px;
+              font-size: 11px;
+              color: #495057;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Controles de la Rutina
+.routine-controls {
+  padding: 35px;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  
+  .control-section {
+    .control-title {
+      margin: 0 0 25px 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: #333;
+      display: flex;
+      align-items: center;
+      
+      i {
+        color: #28a745;
+      }
+    }
+    
+    .control-buttons {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      
+      .btn {
+        padding: 15px 25px;
+        border-radius: 12px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        
+        &:hover:not(:disabled) {
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+  
+  .routine-timer {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    
+    .timer-display {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      
+      .timer-label {
+        font-size: 16px;
+        color: #666;
+        font-weight: 500;
+      }
+      
+      .timer-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #28a745;
+        font-family: 'Courier New', monospace;
+      }
+    }
+    
+    .progress-container {
+      .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: #e9ecef;
+        border-radius: 6px;
+        overflow: hidden;
+        margin-bottom: 10px;
+        
+        .progress-fill {
+          height: 100%;
+          background: linear-gradient(135deg, #28a745, #20c997);
+          border-radius: 6px;
+          transition: width 0.3s ease;
+        }
+      }
+      
+      .progress-text {
+        text-align: center;
+        font-size: 14px;
+        color: #666;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+// Consejos de la Rutina
+.routine-tips {
+  padding: 35px;
+  
+  .tips-title {
+    margin: 0 0 25px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    
+    i {
+      color: #ffc107;
+    }
+  }
+  
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    
+    .tip-item {
+      display: flex;
+      gap: 15px;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+      
+      .tip-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #ffc107, #fd7e14);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 16px;
+        flex-shrink: 0;
+      }
+      
+      .tip-content {
+        .tip-title {
+          margin: 0 0 8px 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+        }
+        
+        .tip-description {
+          margin: 0;
+          color: #666;
+          line-height: 1.5;
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
+
+// Productos Recomendados
+.routine-products {
+  padding: 35px;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  
+  .products-title {
+    margin: 0 0 25px 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    display: flex;
+    align-items: center;
+    
+    i {
+      color: #28a745;
+    }
+  }
+  
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    
+    .product-item {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid #f0f0f0;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+      }
+      
+      .product-image {
+        margin-bottom: 15px;
+        
+        .product-img {
+          width: 100%;
+          height: 150px;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+      }
+      
+      .product-info {
+        margin-bottom: 20px;
+        
+        .product-name {
+          margin: 0 0 8px 0;
+          font-size: 16px;
+          font-weight: 600;
+          color: #333;
+        }
+        
+        .product-description {
+          margin: 0 0 12px 0;
+          color: #666;
+          font-size: 13px;
+          line-height: 1.4;
+        }
+        
+        .product-price {
+          font-size: 18px;
+          font-weight: 700;
+          color: #28a745;
+        }
+      }
+      
+      .product-actions {
+        .btn {
+          width: 100%;
+          padding: 10px;
+          border-radius: 8px;
+          font-weight: 600;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Footer de la Rutina
+.routine-footer {
+  padding: 35px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+  border-radius: 0 0 25px 25px;
+  
+  .footer-content {
+    margin-bottom: 25px;
+    
+    .footer-text {
+      margin: 0;
+      color: #666;
+      font-size: 14px;
+      line-height: 1.5;
+      text-align: center;
+      
+      i {
+        color: #667eea;
+      }
+    }
+  }
+  
+  .footer-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    
+    .btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .routine-overlay {
+    padding: 10px;
+  }
+  
+  .routine-content {
+    max-height: 95vh;
+  }
+  
+  .routine-header {
+    padding: 25px 25px 20px;
+    
+    .routine-title {
+      font-size: 24px;
+    }
+    
+    .routine-subtitle {
+      font-size: 16px;
+    }
+  }
+  
+  .routine-info {
+    padding: 25px;
+    
+    .info-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .routine-steps {
+    padding: 25px;
+    
+    .steps-title {
+      font-size: 22px;
+    }
+    
+    .step-item {
+      flex-direction: column;
+      gap: 15px;
+      
+      .step-number {
+        align-self: center;
+      }
+    }
+  }
+  
+  .routine-controls {
+    padding: 25px;
+    
+    .control-buttons {
+      flex-direction: column;
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+  
+  .routine-tips {
+    padding: 25px;
+    
+    .tips-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .routine-products {
+    padding: 25px;
+    
+    .products-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  .routine-footer {
+    padding: 25px;
+    
+    .footer-actions {
+      flex-direction: column;
+      
+      .btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Scrollbar personalizado
+.routine-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.routine-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.routine-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 4px;
+  
+  &:hover {
+    background: linear-gradient(135deg, #5a6fd8, #6a4190);
+  }
+}

@@ -1,0 +1,223 @@
+<div class="hydration-routine-container" *ngIf="isVisible">
+  <div class="routine-overlay" (click)="closeRoutine()">
+    <div class="routine-content" (click)="$event.stopPropagation()">
+      
+      <!-- Header de la Rutina -->
+      <div class="routine-header">
+        <div class="header-content">
+          <div class="routine-badge">
+            <i class="fas fa-route me-2"></i>
+            Rutina de Hidratación
+          </div>
+          <h2 class="routine-title">{{ routine?.name }}</h2>
+          <p class="routine-subtitle">{{ routine?.description }}</p>
+        </div>
+        <button class="close-btn" (click)="closeRoutine()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Información de la Rutina -->
+      <div class="routine-info" *ngIf="routine">
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Duración</div>
+              <div class="info-value">{{ routine.duration }}</div>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-signal"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Dificultad</div>
+              <div class="info-value difficulty-{{ routine.difficulty }}">
+                {{ getDifficultyLabel(routine.difficulty) }}
+              </div>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-list"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Pasos</div>
+              <div class="info-value">{{ routine.steps.length }} pasos</div>
+            </div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="info-content">
+              <div class="info-label">Tipo de Piel</div>
+              <div class="info-value">{{ getSkinTypesLabel(routine.skinType) }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pasos de la Rutina -->
+      <div class="routine-steps" *ngIf="routine">
+        <h3 class="steps-title">
+          <i class="fas fa-list-ol me-2"></i>
+          Pasos de la Rutina
+        </h3>
+        
+        <div class="steps-container">
+          <div class="step-item" *ngFor="let step of routine.steps; let i = index" 
+               [style.animation-delay]="(i * 0.2) + 's'">
+            <div class="step-number">{{ i + 1 }}</div>
+            <div class="step-content">
+              <div class="step-header">
+                <h4 class="step-title">{{ step.title }}</h4>
+                <div class="step-category-badge category-{{ step.category }}">
+                  {{ getCategoryLabel(step.category) }}
+                </div>
+              </div>
+              <p class="step-description">{{ step.description }}</p>
+              <div class="step-meta">
+                <div class="step-icon">
+                  <i [class]="step.icon"></i>
+                </div>
+                <div class="step-skin-types">
+                  <span class="skin-type-badge" *ngFor="let skinType of step.skinType">
+                    {{ getSkinTypeLabel(skinType) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles de la Rutina -->
+      <div class="routine-controls" *ngIf="routine">
+        <div class="control-section">
+          <h4 class="control-title">
+            <i class="fas fa-play-circle me-2"></i>
+            Controles de la Rutina
+          </h4>
+          
+          <div class="control-buttons">
+            <button class="btn btn-primary btn-lg" 
+                    (click)="startRoutine()" 
+                    [disabled]="isRoutineActive">
+              <i class="fas fa-play me-2"></i>
+              {{ isRoutineActive ? 'Rutina en Progreso...' : 'Comenzar Rutina' }}
+            </button>
+            
+            <button class="btn btn-outline-secondary" 
+                    (click)="pauseRoutine()" 
+                    [disabled]="!isRoutineActive || isPaused">
+              <i class="fas fa-pause me-2"></i>
+              Pausar
+            </button>
+            
+            <button class="btn btn-outline-danger" 
+                    (click)="stopRoutine()" 
+                    [disabled]="!isRoutineActive">
+              <i class="fas fa-stop me-2"></i>
+              Detener
+            </button>
+          </div>
+        </div>
+
+        <!-- Timer de la Rutina -->
+        <div class="routine-timer" *ngIf="isRoutineActive">
+          <div class="timer-display">
+            <div class="timer-label">Tiempo Transcurrido:</div>
+            <div class="timer-value">{{ formatTime(elapsedTime) }}</div>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+            </div>
+            <div class="progress-text">{{ progressPercentage }}% completado</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Consejos Adicionales -->
+      <div class="routine-tips" *ngIf="routine">
+        <h4 class="tips-title">
+          <i class="fas fa-lightbulb me-2"></i>
+          Consejos para esta Rutina
+        </h4>
+        
+        <div class="tips-grid">
+          <div class="tip-item" *ngFor="let tip of getRoutineTips()">
+            <div class="tip-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="tip-content">
+              <h5 class="tip-title">{{ tip.title }}</h5>
+              <p class="tip-description">{{ tip.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos Recomendados para la Rutina -->
+      <div class="routine-products" *ngIf="routine && recommendedProducts.length > 0">
+        <h4 class="products-title">
+          <i class="fas fa-shopping-bag me-2"></i>
+          Productos Recomendados para esta Rutina
+        </h4>
+        
+        <div class="products-grid">
+          <div class="product-item" *ngFor="let product of recommendedProducts">
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name" class="product-img">
+            </div>
+            <div class="product-info">
+              <h5 class="product-name">{{ product.name }}</h5>
+              <p class="product-description">{{ product.description }}</p>
+              <div class="product-price">${{ product.price }}</div>
+            </div>
+            <div class="product-actions">
+              <button class="btn btn-primary btn-sm" (click)="addToCart(product)">
+                <i class="fas fa-cart-plus me-1"></i>
+                Agregar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer de la Rutina -->
+      <div class="routine-footer">
+        <div class="footer-content">
+          <p class="footer-text">
+            <i class="fas fa-info-circle me-2"></i>
+            Esta rutina está diseñada para {{ getDifficultyLabel(routine?.difficulty || 'beginner') }}s. 
+            Ajusta según tu tipo de piel y necesidades específicas.
+          </p>
+        </div>
+        
+        <div class="footer-actions">
+          <button class="btn btn-outline-primary" (click)="saveRoutine()">
+            <i class="fas fa-bookmark me-2"></i>
+            Guardar Rutina
+          </button>
+          <button class="btn btn-outline-success" (click)="shareRoutine()">
+            <i class="fas fa-share me-2"></i>
+            Compartir
+          </button>
+          <button class="btn btn-outline-info" (click)="downloadRoutine()">
+            <i class="fas fa-download me-2"></i>
+            Descargar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

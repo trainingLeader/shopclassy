@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Product } from '../../interfaces/product';
 import { HydrationService, HydrationTip, HydrationRoutine } from '../../services/hydration-service';
 import { CartService } from '../../services/cart-service';
+import { HydrationRoutineComponent } from '../hydration-routine/hydration-routine';
 
 @Component({
   selector: 'app-hydration-tips',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HydrationRoutineComponent],
   templateUrl: './hydration-tips.html',
   styleUrl: './hydration-tips.scss'
 })
@@ -27,6 +28,10 @@ export class HydrationTips implements OnInit, OnDestroy {
   filteredTips: HydrationTip[] = [];
   hydrationRoutines: HydrationRoutine[] = [];
   recommendedProducts: Product[] = [];
+  
+  // Estado del modal de rutinas
+  showRoutineModal = false;
+  selectedRoutine: HydrationRoutine | null = null;
   
   // Estadísticas
   stats = {
@@ -150,7 +155,7 @@ export class HydrationTips implements OnInit, OnDestroy {
     const labels: { [key: string]: string } = {
       'beginner': 'Principiante',
       'intermediate': 'Intermedio',
-      'advanced': 'Avanzado'
+      'advanced': 'Advanced'
     };
     return labels[difficulty] || difficulty;
   }
@@ -183,27 +188,21 @@ export class HydrationTips implements OnInit, OnDestroy {
   
   // Acciones de rutinas
   viewRoutine(routine: HydrationRoutine): void {
-    console.log('Ver rutina:', routine.name);
-    // Aquí podrías abrir un modal con los pasos detallados
-    this.showRoutineDetails(routine);
+    console.log('Abriendo modal de rutina:', routine.name);
+    this.selectedRoutine = routine;
+    this.showRoutineModal = true;
   }
   
   startRoutine(routine: HydrationRoutine): void {
-    console.log('Comenzar rutina:', routine.name);
-    // Aquí podrías iniciar un timer o guía paso a paso
-    this.startRoutineTimer(routine);
+    console.log('Comenzando rutina:', routine.name);
+    // Abrir el modal de rutina para comenzar
+    this.viewRoutine(routine);
   }
   
-  private showRoutineDetails(routine: HydrationRoutine): void {
-    // Implementar modal con detalles de la rutina
-    alert(`Rutina: ${routine.name}\n\nPasos:\n${routine.steps.map((step, index) => 
-      `${index + 1}. ${step.title}: ${step.description}`
-    ).join('\n')}`);
-  }
-  
-  private startRoutineTimer(routine: HydrationRoutine): void {
-    // Implementar timer para la rutina
-    alert(`¡Comenzando rutina: ${routine.name}!\n\nDuración estimada: ${routine.difficulty}`);
+  // Cerrar modal de rutinas
+  closeRoutineModal(): void {
+    this.showRoutineModal = false;
+    this.selectedRoutine = null;
   }
   
   // Acciones de productos
