@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, HostListener, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { ShopCar } from '../shop-car/shop-car';
 
 interface MenuItem {
   label: string;
@@ -12,7 +13,7 @@ interface MenuItem {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ShopCar],
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })

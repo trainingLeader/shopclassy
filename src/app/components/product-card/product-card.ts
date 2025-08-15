@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, HostBinding, ElementRef, ViewChild, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, HostBinding, ElementRef, ViewChild, AfterViewInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Product } from '../../interfaces/product';
 import { CommonModule } from '@angular/common';
 import { VideoPreview } from '../video-preview/video-preview';
+import { CartService } from '../../services/cart-service';
 
 @Component({
   selector: 'app-product-card',
@@ -25,8 +26,13 @@ export class ProductCard implements OnInit, AfterViewInit {
   imageLoaded = false;
   imageError = false;
   showSkeleton = true;
+  isAddingToCart = false;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private cartService: CartService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   @HostBinding('class.card-animated') get cardAnimated() {
     return this.isVisible;
@@ -40,76 +46,99 @@ export class ProductCard implements OnInit, AfterViewInit {
     // Simular delay de animación escalonada
     setTimeout(() => {
       this.isVisible = true;
+      this.cdr.detectChanges();
     }, this.animationDelay);
-  }
-
-  ngAfterViewInit(): void {
-    // Cargar imagen inmediatamente después de la inicialización
-    setTimeout(() => {
-      if (isPlatformBrowser(this.platformId)) {
-        this.setupImageLazyLoading();
-      } else {
-        // En SSR, cargar la imagen directamente
-        this.loadImage();
+    
+    // Solo cargar imagen en el navegador
+    if (isPlatformBrowser(this.platformId)) {
+      if (this.product && this.product.image) {
+        // Usar setTimeout para evitar el error de detección de cambios
+        setTimeout(() => {
+          this.loadImageDirectly();
+        }, 0);
       }
-    }, 100);
-  }
-
-  private setupImageLazyLoading(): void {
-    if (this.productImage && this.product.image) {
-      // Si tenemos la imagen y el elemento, cargar directamente
-      this.loadImage();
-      
-      // Opcional: También configurar Intersection Observer para futuras optimizaciones
-      if (typeof window !== 'undefined' && 'IntersectionObserver' in window) {
-        const imageObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && !this.imageLoaded && !this.imageError) {
-                // Solo recargar si no se ha cargado aún
-                this.loadImage();
-              }
-            });
-          },
-          {
-            threshold: 0.1,
-            rootMargin: '50px'
-          }
-        );
-
-        imageObserver.observe(this.productImage.nativeElement);
-      }
-    } else {
-      console.warn('Product image or image element not found:', this.product?.image);
-      this.showSkeleton = false;
     }
   }
 
-  private loadImage(): void {
-    if (this.productImage && this.product.image) {
-      const img = this.productImage.nativeElement;
+  ngAfterViewInit(): void {
+    // Solo en el navegador
+    if (isPlatformBrowser(this.platformId)) {
+      // Si la imagen no se cargó en ngOnInit, intentar cargarla aquí
+      if (!this.imageLoaded && !this.imageError && this.product && this.product.image) {
+        setTimeout(() => {
+          this.loadImageDirectly();
+        }, 100);
+      }
       
-      // Configurar event handlers antes de establecer src
+      // Fallback de seguridad: ocultar skeleton después de 3 segundos
+      setTimeout(() => {
+        if (this.showSkeleton) {
+          console.warn('Safety fallback: hiding skeleton after 3 seconds');
+          this.showSkeleton = false;
+          this.imageError = true;
+          this.cdr.detectChanges();
+        }
+      }, 3000);
+    } else {
+      // En SSR, ocultar skeleton inmediatamente
+      this.showSkeleton = false;
+      this.cdr.detectChanges();
+    }
+  }
+
+  private loadImageDirectly(): void {
+    if (!this.product || !this.product.image || !isPlatformBrowser(this.platformId)) {
+      this.showSkeleton = false;
+      this.cdr.detectChanges();
+      return;
+    }
+
+    try {
+      // Crear una nueva imagen para precargar
+      const img = new Image();
+      
       img.onload = () => {
         console.log('Image loaded successfully:', this.product.image);
         this.imageLoaded = true;
         this.showSkeleton = false;
+        this.cdr.detectChanges();
+        
+        // Si tenemos el elemento DOM, establecer la imagen
+        if (this.productImage && this.productImage.nativeElement) {
+          this.productImage.nativeElement.src = this.product.image;
+        }
       };
 
       img.onerror = () => {
         console.error('Image failed to load:', this.product.image);
         this.imageError = true;
         this.showSkeleton = false;
-        // Cargar imagen por defecto en caso de error
-        img.src = 'https://via.placeholder.com/300x250/f8f9fa/6c757d?text=Image+Not+Found';
+        this.cdr.detectChanges();
+        
+        // Si tenemos el elemento DOM, establecer imagen por defecto
+        if (this.productImage && this.productImage.nativeElement) {
+          this.productImage.nativeElement.src = 'https://via.placeholder.com/300x250/f8f9fa/6c757d?text=Image+Not+Found';
+        }
       };
 
-      // Establecer src después de configurar los handlers
-      console.log('Loading image:', this.product.image);
+      // Intentar cargar la imagen
+      console.log('Loading image directly:', this.product.image);
       img.src = this.product.image;
-    } else {
-      console.warn('Cannot load image: missing productImage or product.image');
+      
+      // Timeout adicional de seguridad
+      setTimeout(() => {
+        if (this.showSkeleton) {
+          console.warn('Image loading timeout, hiding skeleton');
+          this.showSkeleton = false;
+          this.imageError = true;
+          this.cdr.detectChanges();
+        }
+      }, 2000);
+    } catch (error) {
+      console.error('Error loading image:', error);
       this.showSkeleton = false;
+      this.imageError = true;
+      this.cdr.detectChanges();
     }
   }
 
@@ -146,5 +175,26 @@ export class ProductCard implements OnInit, AfterViewInit {
     if (!this.product.originalPrice) return 0;
     const savings = this.product.originalPrice - this.product.price;
     return Math.round((savings / this.product.originalPrice) * 100);
+  }
+
+  addToCart(): void {
+    if (!this.product.inStock) return;
+    
+    this.isAddingToCart = true;
+    
+    // Simulate a brief loading state
+    setTimeout(() => {
+      this.cartService.addToCart(this.product, 1);
+      this.isAddingToCart = false;
+      this.cdr.detectChanges();
+      
+      // Show success feedback
+      this.showAddToCartSuccess();
+    }, 500);
+  }
+
+  private showAddToCartSuccess(): void {
+    // You can implement a toast notification here
+    console.log(`${this.product.name} added to cart!`);
   }
 }

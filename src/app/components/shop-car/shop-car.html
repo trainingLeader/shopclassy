@@ -1,0 +1,98 @@
+<!-- Shopping Cart Icon with Badge -->
+<div class="cart-container">
+  <button class="cart-toggle" (click)="toggleCart()" [class.active]="isCartOpen">
+    <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"/>
+    </svg>
+    <span class="cart-badge" *ngIf="cartItemCount > 0">{{ cartItemCount }}</span>
+  </button>
+
+  <!-- Shopping Cart Panel -->
+  <div class="cart-panel" [class.open]="isCartOpen">
+    <div class="cart-header">
+      <h3>Shopping Cart</h3>
+      <button class="close-btn" (click)="closeCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Empty Cart State -->
+    <div class="empty-cart" *ngIf="cartItems.length === 0">
+      <svg class="empty-cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"/>
+      </svg>
+      <p>Your cart is empty</p>
+      <span>Add some products to get started!</span>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="cart-items" *ngIf="cartItems.length > 0">
+      <div class="cart-item" *ngFor="let item of cartItems">
+        <div class="item-image">
+          <img [src]="item.product.image" [alt]="item.product.name">
+        </div>
+        
+        <div class="item-details">
+          <h4 class="item-name">{{ item.product.name }}</h4>
+          <p class="item-brand">{{ item.product.brand }}</p>
+          
+          <div class="item-price">
+            <span class="current-price">{{ getFormattedPrice(item.product.price) }}</span>
+            <span class="original-price" *ngIf="item.product.originalPrice">
+              {{ getFormattedPrice(item.product.originalPrice) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="item-quantity">
+          <button class="qty-btn" (click)="updateQuantity(item.product.id, item.quantity - 1)" 
+                  [disabled]="item.quantity <= 1">-</button>
+          <span class="qty-value">{{ item.quantity }}</span>
+          <button class="qty-btn" (click)="updateQuantity(item.product.id, item.quantity + 1)">+</button>
+        </div>
+
+        <div class="item-total">
+          <span class="total-price">{{ getFormattedPrice(item.product.price * item.quantity) }}</span>
+        </div>
+
+        <button class="remove-btn" (click)="removeFromCart(item.product.id)" title="Remove item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cart Summary -->
+    <div class="cart-summary" *ngIf="cartItems.length > 0">
+      <div class="summary-row">
+        <span>Subtotal:</span>
+        <span>{{ getFormattedPrice(cartTotal) }}</span>
+      </div>
+      
+      <div class="summary-row savings" *ngIf="getTotalSavings() > 0">
+        <span>You save:</span>
+        <span class="savings-amount">-{{ getFormattedPrice(getTotalSavings()) }}</span>
+      </div>
+      
+      <div class="summary-row total">
+        <span>Total:</span>
+        <span class="total-amount">{{ getFormattedPrice(cartTotal) }}</span>
+      </div>
+
+      <div class="cart-actions">
+        <button class="clear-cart-btn" (click)="clearCart()">
+          Clear Cart
+        </button>
+        <button class="checkout-btn" (click)="checkout()">
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Overlay -->
+  <div class="cart-overlay" *ngIf="isCartOpen" (click)="closeCart()"></div>
+</div>
