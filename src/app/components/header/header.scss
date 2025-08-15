@@ -1,3 +1,4 @@
+
 // Header principal
 .navbar {
   background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
@@ -89,13 +90,13 @@
   }
 }
 
-// Enlaces de navegación - CORRECCIÓN CRÍTICA
+// Enlaces de navegación
 .navbar-nav {
   .nav-item {
     margin: 0 0.5rem;
     
     .nav-link {
-      color: #000000;
+      color: #ffffff !important;
       font-weight: 500;
       font-size: 1rem;
       padding: 0.75rem 1rem;
@@ -103,9 +104,9 @@
       position: relative;
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      display: block !important; // Forzar visualización
-      opacity: 1 !important; // Forzar opacidad
-      visibility: visible !important; // Forzar visibilidad
+      display: block !important;
+      opacity: 1 !important;
+      visibility: visible !important;
       
       // Efecto de fondo deslizante
       &::before {
@@ -195,7 +196,7 @@
   }
 }
 
-// CORRECCIÓN CRÍTICA: Asegurar que el menú se muestre correctamente
+// Asegurar que el menú se muestre correctamente
 .navbar-collapse {
   // IMPORTANTE: Asegurar que el menú se muestre cuando está abierto
   &.show {
@@ -232,18 +233,18 @@
   .navbar-nav {
     .nav-item {
       margin: 0.5rem 0;
-      opacity: 1 !important; // Forzar opacidad en móvil
-      transform: translateX(0); // Resetear transformación
-      animation: none; // Deshabilitar animación problemática
+      opacity: 1 !important;
+      transform: translateX(0);
+      animation: none;
       
       .nav-link {
         text-align: center;
         padding: 1rem;
         border-radius: 15px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        display: block !important; // Forzar visualización
-        opacity: 1 !important; // Forzar opacidad
-        visibility: visible !important; // Forzar visibilidad
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
         
         &:hover {
           transform: translateX(5px);
@@ -323,25 +324,25 @@
 }
 
 @media (min-width: 992px) {
-	/* Forzar que el contenedor del menú esté visible en escritorio */
-	.navbar-collapse {
-		display: flex !important;
-		align-items: center;
-	}
-	.navbar-collapse.collapse:not(.show) {
-		display: flex !important;
-	}
-	/* Alinear lista y acciones en escritorio */
-	.navbar-nav {
-		display: flex;
-		flex-direction: row;
-	}
-	.mobile-actions {
-		flex-direction: row;
-		width: auto;
-		margin-top: 0;
-		.gap-2 { gap: .5rem; }
-	}
+  /* Forzar que el contenedor del menú esté visible en escritorio */
+  .navbar-collapse {
+    display: flex !important;
+    align-items: center;
+  }
+  .navbar-collapse.collapse:not(.show) {
+    display: flex !important;
+  }
+  /* Alinear lista y acciones en escritorio */
+  .navbar-nav {
+    display: flex;
+    flex-direction: row;
+  }
+  .mobile-actions {
+    flex-direction: row;
+    width: auto;
+    margin-top: 0;
+    .gap-2 { gap: .5rem; }
+  }
 }
 
 // Animaciones para menú móvil
@@ -398,4 +399,62 @@
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
+}
+
+// Estilos específicos para el carrito de compras en el header
+.mobile-actions {
+  app-shop-car {
+    .cart-toggle {
+      background: none;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        transform: scale(1.05);
+      }
+      
+      &.active {
+        background-color: rgba(255, 255, 255, 0.2);
+      }
+    }
+    
+    .cart-icon {
+      stroke: white;
+      stroke-width: 2;
+      width: 24px;
+      height: 24px;
+    }
+    
+    .cart-badge {
+      background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+      color: white;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Estilos específicos para el carrito en móvil
+@media (max-width: 991.98px) {
+  app-shop-car {
+    width: 100%;
+    
+    .cart-toggle {
+      width: 100%;
+      justify-content: center;
+      padding: 12px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+      }
+    }
+  }
 }
