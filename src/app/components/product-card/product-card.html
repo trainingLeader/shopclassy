@@ -5,14 +5,13 @@
           <div class="skeleton-shimmer"></div>
         </div>
         
-        <!-- Imagen del producto con lazy loading -->
+        <!-- Imagen del producto - Carga inmediata optimizada -->
         <img 
           #productImage
           [alt]="product.name"
           class="card-img-top product-image"
           [class.image-loaded]="imageLoaded"
-          [class.image-error]="imageError"
-          loading="lazy">
+          [class.image-error]="imageError">
         
         <div class="position-absolute top-0 start-0 m-2">
           <span class="category-badge">{{ product.category }}</span>
@@ -90,13 +89,20 @@
         
         <button 
           class="btn btn-primary w-100"
-          [disabled]="!product.inStock">
-          <span *ngIf="product.inStock; else outOfStockText">
+          [disabled]="!product.inStock || isAddingToCart"
+          (click)="addToCart()">
+          <span *ngIf="product.inStock && !isAddingToCart; else outOfStockText">
             <i class="fas fa-cart-plus me-2"></i>
             Add to Cart
           </span>
           <ng-template #outOfStockText>
-            Out of Stock
+            <span *ngIf="isAddingToCart; else outOfStockMessage">
+              <i class="fas fa-spinner fa-spin me-2"></i>
+              Adding...
+            </span>
+            <ng-template #outOfStockMessage>
+              Out of Stock
+            </ng-template>
           </ng-template>
         </button>
       </div>
