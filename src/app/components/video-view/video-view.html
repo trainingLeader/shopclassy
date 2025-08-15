@@ -1,0 +1,142 @@
+<!-- Modal de Video Tips -->
+<div class="video-modal-overlay" *ngIf="isVisible" (click)="closeModal()">
+  <div class="video-modal-content" (click)="$event.stopPropagation()">
+    <!-- Header del Modal -->
+    <div class="video-modal-header">
+      <div class="video-info">
+        <h3 class="video-title">
+          <i class="fas fa-play-circle me-2"></i>
+          {{ productName }}
+        </h3>
+        <p class="video-subtitle">Video Tips & Demostración</p>
+      </div>
+      <button class="close-button" (click)="closeModal()" title="Cerrar video">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Contenido del Video -->
+    <div class="video-container">
+      <!-- Video Principal -->
+      <div class="main-video-wrapper">
+        <video 
+          #mainVideo
+          class="main-video"
+          [src]="videoUrl"
+          controls
+          preload="metadata"
+          poster="https://images.pexels.com/photos/2533266/pexels-photo-2533266.jpeg"
+          (loadedmetadata)="onVideoLoaded()"
+          (error)="onVideoError()">
+          Tu navegador no soporta el elemento de video.
+        </video>
+        
+        <!-- Overlay de Play Button -->
+        <div class="play-overlay" *ngIf="!isVideoPlaying" (click)="playVideo()">
+          <div class="play-button">
+            <i class="fas fa-play"></i>
+          </div>
+          <p class="play-text">Haz clic para reproducir</p>
+        </div>
+      </div>
+
+      <!-- Controles de Video -->
+      <div class="video-controls">
+        <div class="control-group">
+          <button class="control-btn" (click)="togglePlayPause()" [title]="isVideoPlaying ? 'Pausar' : 'Reproducir'">
+            <i [class]="isVideoPlaying ? 'fas fa-pause' : 'fas fa-play'"></i>
+          </button>
+          <button class="control-btn" (click)="restartVideo()" title="Reiniciar">
+            <i class="fas fa-redo"></i>
+          </button>
+          <button class="control-btn" (click)="toggleMute()" [title]="isMuted ? 'Activar sonido' : 'Silenciar'">
+            <i [class]="isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'"></i>
+          </button>
+        </div>
+        
+        <div class="progress-container">
+          <div class="progress-bar" (click)="seekVideo($event)">
+            <div class="progress-fill" [style.width.%]="videoProgress"></div>
+            <div class="progress-handle" [style.left.%]="videoProgress"></div>
+          </div>
+          <div class="time-display">
+            {{ currentTime | timeFormat }} / {{ duration | timeFormat }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Información del Producto -->
+    <div class="product-info">
+      <div class="product-details">
+        <div class="product-image">
+          <img [src]="productImage" [alt]="productName" class="product-thumbnail">
+        </div>
+        <div class="product-text">
+          <h4 class="product-name">{{ productName }}</h4>
+          <p class="product-description">{{ productDescription }}</p>
+          <div class="product-meta">
+            <span class="product-category">{{ productCategory }}</span>
+            <span class="product-brand">{{ productBrand }}</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Acciones del Producto -->
+      <div class="product-actions">
+        <button class="btn btn-primary btn-sm" (click)="addToCart()">
+          <i class="fas fa-cart-plus me-2"></i>
+          Agregar al Carrito
+        </button>
+        <button class="btn btn-outline-secondary btn-sm" (click)="viewProductDetails()">
+          <i class="fas fa-eye me-2"></i>
+          Ver Detalles
+        </button>
+      </div>
+    </div>
+
+    <!-- Tips y Consejos -->
+    <div class="video-tips">
+      <h4 class="tips-title">
+        <i class="fas fa-lightbulb me-2"></i>
+        Tips & Consejos
+      </h4>
+      <div class="tips-content">
+        <div class="tip-item" *ngFor="let tip of videoTips; let i = index">
+          <div class="tip-number">{{ i + 1 }}</div>
+          <div class="tip-text">
+            <h5 class="tip-title">{{ tip.title }}</h5>
+            <p class="tip-description">{{ tip.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer del Modal -->
+    <div class="video-modal-footer">
+      <div class="social-sharing">
+        <span class="share-text">Compartir:</span>
+        <button class="social-btn" title="Compartir en Facebook">
+          <i class="fab fa-facebook"></i>
+        </button>
+        <button class="social-btn" title="Compartir en Twitter">
+          <i class="fab fa-twitter"></i>
+        </button>
+        <button class="social-btn" title="Compartir en Instagram">
+          <i class="fab fa-instagram"></i>
+        </button>
+      </div>
+      
+      <div class="video-actions">
+        <button class="btn btn-outline-primary btn-sm" (click)="downloadVideo()">
+          <i class="fas fa-download me-2"></i>
+          Descargar
+        </button>
+        <button class="btn btn-outline-success btn-sm" (click)="saveToFavorites()">
+          <i class="fas fa-heart me-2"></i>
+          Guardar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

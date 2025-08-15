@@ -4,11 +4,12 @@ import { Product } from '../../interfaces/product';
 import { CommonModule } from '@angular/common';
 import { VideoPreview } from '../video-preview/video-preview';
 import { CartService } from '../../services/cart-service';
+import { VideoView } from '../video-view/video-view';
 
 @Component({
   selector: 'app-product-card',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, VideoView],
   templateUrl: './product-card.html',
   styleUrl: './product-card.scss'
 })
@@ -27,6 +28,7 @@ export class ProductCard implements OnInit, AfterViewInit {
   imageError = false;
   showSkeleton = true;
   isAddingToCart = false;
+  showVideoTips = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -152,15 +154,26 @@ export class ProductCard implements OnInit, AfterViewInit {
 
   openVideoModal(): void {
     if (this.product.videoUrl) {
-      this.openVideo.emit({
-        videoUrl: this.product.videoUrl,
-        productName: this.product.name
-      });
+      this.showVideoTips = true;
+      this.cdr.detectChanges();
     }
   }
 
   openDetailModal(): void {
     this.openDetail.emit(this.product);
+  }
+
+  closeVideoTips(): void {
+    this.showVideoTips = false;
+    this.cdr.detectChanges();
+  }
+
+  onAddToCartFromVideo(): void {
+    this.addToCart();
+  }
+
+  onViewProductDetailsFromVideo(): void {
+    this.openDetailModal();
   }
 
   getStars(rating: number): number[] {

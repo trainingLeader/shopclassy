@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, Inject, PLATFORM_ID, OnInit } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { ShopCar } from '../shop-car/shop-car';
+import { HydrationTips } from '../hydration-tips/hydration-tips';
+import { Product } from '../../interfaces/product';
 
 interface MenuItem {
   label: string;
@@ -13,7 +15,7 @@ interface MenuItem {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ShopCar],
+  imports: [CommonModule, ShopCar, HydrationTips],
   templateUrl: './header.html',
   styleUrl: './header.scss'
 })
@@ -23,6 +25,7 @@ export class Header implements OnInit {
   isAnimating = false;
   windowWidth: number = 0;
   isMobile: boolean = false;
+  showHydrationTips = false;
 
   menuItems: MenuItem[] = [
     { label: 'Home', href: '#home', icon: 'fas fa-home', active: true },
@@ -98,5 +101,23 @@ export class Header implements OnInit {
         }, 350);
       }, 300);
     }
+  }
+
+  openHydrationTips(): void {
+    this.showHydrationTips = true;
+  }
+
+  closeHydrationTips(): void {
+    this.showHydrationTips = false;
+  }
+
+  onAddToCart(product: Product): void {
+    console.log('Producto agregado al carrito desde header:', product.name);
+    // Aquí podrías emitir un evento o actualizar el estado del carrito
+  }
+
+  onViewProduct(product: Product): void {
+    console.log('Ver producto desde header:', product.name);
+    // Aquí podrías navegar a la página del producto o abrir un modal
   }
 }

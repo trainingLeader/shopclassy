@@ -78,21 +78,26 @@ export class ProductGrid implements OnInit, AfterViewInit {
   }
 
   onOpenVideo(videoData: {videoUrl: string, productName: string}): void {
+    console.log('Opening video modal:', videoData);
     this.currentVideo = videoData;
     this.showVideoModal = true;
   }
 
   onCloseVideoModal(): void {
+    console.log('Closing video modal');
     this.showVideoModal = false;
     this.currentVideo = { videoUrl: '', productName: '' };
   }
 
   onOpenDetail(product: Product): void {
+    console.log('Opening detail modal for product:', product.name);
     this.currentProduct = product;
     this.showDetailModal = true;
+    console.log('Modal state:', { showDetailModal: this.showDetailModal, currentProduct: this.currentProduct });
   }
 
   onCloseDetailModal(): void {
+    console.log('Closing detail modal');
     this.showDetailModal = false;
     this.currentProduct = null;
   }

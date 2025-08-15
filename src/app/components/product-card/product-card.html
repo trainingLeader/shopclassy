@@ -107,3 +107,12 @@
         </button>
       </div>
     </div>
+
+    <!-- Componente de Video Tips -->
+    <app-video-view
+      [product]="product"
+      [isVisible]="showVideoTips"
+      (closeVideo)="closeVideoTips()"
+      (addToCartEvent)="onAddToCartFromVideo()"
+      (viewProductDetailsEvent)="onViewProductDetailsFromVideo()">
+    </app-video-view>
