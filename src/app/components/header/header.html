@@ -33,6 +33,9 @@
       </ul>
       
       <div class="d-flex align-items-center mobile-actions">
+        <button class="btn btn-outline-light me-3" (click)="openHydrationTips()" title="Tips de Hidratación">
+          <i class="fas fa-tint"></i>
+        </button>
         <button class="btn btn-outline-light me-3">
           <i class="fas fa-search"></i>
         </button>
@@ -47,3 +50,11 @@
     </div>
   </div>
 </nav>
+
+<!-- Componente de Tips de Hidratación -->
+<app-hydration-tips 
+  [isVisible]="showHydrationTips"
+  (closeTipsEvent)="closeHydrationTips()"
+  (addToCartEvent)="onAddToCart($event)"
+  (viewProductEvent)="onViewProduct($event)">
+</app-hydration-tips>

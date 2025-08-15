@@ -50,18 +50,23 @@ export class DetailProduct implements OnInit, OnChanges {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   ngOnInit(): void {
+    console.log('DetailProduct ngOnInit - isOpen:', this.isOpen, 'product:', this.product);
     this.initializeFromProduct();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('DetailProduct ngOnChanges:', changes);
     if ((changes['product'] && changes['product'].currentValue) ||
         (changes['isOpen'] && changes['isOpen'].currentValue === true)) {
+      console.log('Initializing from product changes');
       this.initializeFromProduct();
     }
   }
 
   private initializeFromProduct(): void {
+    console.log('Initializing from product:', this.product);
     if (!this.product) {
+      console.log('No product provided');
       return;
     }
 
@@ -88,9 +93,13 @@ export class DetailProduct implements OnInit, OnChanges {
     this.quantity = 1;
     this.selectedSize = this.availableSizes[0] ?? '';
     this.selectedColor = this.availableColors[0] ?? '';
+    
+    console.log('Product images:', this.productImages);
+    console.log('Selected size:', this.selectedSize, 'Selected color:', this.selectedColor);
   }
 
   close(): void {
+    console.log('Closing detail modal');
     this.closeModal.emit();
   }
 

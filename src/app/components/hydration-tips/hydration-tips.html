@@ -1,0 +1,209 @@
+<div class="hydration-tips-container" *ngIf="isVisible">
+  <div class="hydration-tips-overlay" (click)="closeTips()">
+    <div class="hydration-tips-content" (click)="$event.stopPropagation()">
+      <!-- Header -->
+      <div class="tips-header">
+        <div class="header-content">
+          <h2 class="tips-title">
+            <i class="fas fa-tint me-3"></i>
+            Tips de Hidratación
+          </h2>
+          <p class="tips-subtitle">Consejos expertos para mantener tu piel hidratada y saludable</p>
+        </div>
+        <button class="close-btn" (click)="closeTips()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="tips-filters">
+        <div class="filter-group">
+          <label class="filter-label">Categoría:</label>
+          <select class="filter-select" [(ngModel)]="selectedCategory" (change)="filterTips()">
+            <option value="all">Todas las Categorías</option>
+            <option value="morning">Rutina Matutina</option>
+            <option value="evening">Rutina Nocturna</option>
+            <option value="general">Consejos Generales</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label class="filter-label">Tipo de Piel:</label>
+          <select class="filter-select" [(ngModel)]="selectedSkinType" (change)="filterTips()">
+            <option value="all">Todos los Tipos</option>
+            <option value="dry">Piel Seca</option>
+            <option value="normal">Piel Normal</option>
+            <option value="combination">Piel Mixta</option>
+            <option value="oily">Piel Grasa</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Estadísticas -->
+      <div class="hydration-stats">
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">{{ stats.totalTips }}</div>
+            <div class="stat-label">Tips Disponibles</div>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">{{ stats.totalRoutines }}</div>
+            <div class="stat-label">Rutinas</div>
+          </div>
+        </div>
+        
+        <div class="stat-item">
+          <div class="stat-icon">
+            <i class="fas fa-star"></i>
+          </div>
+          <div class="stat-content">
+            <div class="stat-number">{{ stats.categories.length }}</div>
+            <div class="stat-label">Categorías</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips Filtrados -->
+      <div class="tips-grid">
+        <div class="tip-card" *ngFor="let tip of filteredTips; let i = index" 
+             [style.animation-delay]="(i * 0.1) + 's'">
+          <div class="tip-header">
+            <div class="tip-icon">
+              <i [class]="tip.icon"></i>
+            </div>
+            <div class="tip-category-badge" [class]="'category-' + tip.category">
+              {{ getCategoryLabel(tip.category) }}
+            </div>
+          </div>
+          
+          <div class="tip-content">
+            <h3 class="tip-title">{{ tip.title }}</h3>
+            <p class="tip-description">{{ tip.description }}</p>
+          </div>
+          
+          <div class="tip-footer">
+            <div class="skin-types">
+              <span class="skin-type-badge" *ngFor="let skinType of tip.skinType">
+                {{ getSkinTypeLabel(skinType) }}
+              </span>
+            </div>
+            <button class="tip-action-btn" (click)="saveTip(tip)">
+              <i class="fas fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rutinas de Hidratación -->
+      <div class="routines-section">
+        <h3 class="routines-title">
+          <i class="fas fa-route me-2"></i>
+          Rutinas de Hidratación
+        </h3>
+        
+        <div class="routines-grid">
+          <div class="routine-card" *ngFor="let routine of hydrationRoutines; let i = index"
+               [style.animation-delay]="(i * 0.1) + 's'">
+            <div class="routine-header">
+              <h4 class="routine-name">{{ routine.name }}</h4>
+              <div class="routine-difficulty" [class]="'difficulty-' + routine.difficulty">
+                {{ getDifficultyLabel(routine.difficulty) }}
+              </div>
+            </div>
+            
+            <p class="routine-description">{{ routine.description }}</p>
+            
+            <div class="routine-meta">
+              <div class="routine-duration">
+                <i class="fas fa-clock me-1"></i>
+                {{ routine.duration }}
+              </div>
+              <div class="routine-steps">
+                <i class="fas fa-list me-1"></i>
+                {{ routine.steps.length }} pasos
+              </div>
+            </div>
+            
+            <div class="routine-actions">
+              <button class="btn btn-outline-primary btn-sm" (click)="viewRoutine(routine)">
+                <i class="fas fa-eye me-1"></i>
+                Ver Rutina
+              </button>
+              <button class="btn btn-primary btn-sm" (click)="startRoutine(routine)">
+                <i class="fas fa-play me-1"></i>
+                Comenzar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Productos Recomendados -->
+      <div class="recommended-products" *ngIf="recommendedProducts.length > 0">
+        <h3 class="recommended-title">
+          <i class="fas fa-star me-2"></i>
+          Productos de Hidratación Recomendados
+        </h3>
+        
+        <div class="products-grid">
+          <div class="product-card" *ngFor="let product of recommendedProducts; let i = index"
+               [style.animation-delay]="(i * 0.1) + 's'">
+            <div class="product-image">
+              <img [src]="product.image" [alt]="product.name" class="product-img">
+            </div>
+            
+            <div class="product-info">
+              <h4 class="product-name">{{ product.name }}</h4>
+              <p class="product-description">{{ product.description }}</p>
+              <div class="product-price">
+                <span class="current-price">${{ product.price }}</span>
+                <span class="original-price" *ngIf="product.originalPrice">${{ product.originalPrice }}</span>
+              </div>
+            </div>
+            
+            <div class="product-actions">
+              <button class="btn btn-primary btn-sm" (click)="addToCart(product)">
+                <i class="fas fa-cart-plus me-1"></i>
+                Agregar
+              </button>
+              <button class="btn btn-outline-secondary btn-sm" (click)="viewProduct(product)">
+                <i class="fas fa-eye me-1"></i>
+                Ver
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="tips-footer">
+        <div class="footer-content">
+          <p class="footer-text">
+            <i class="fas fa-info-circle me-2"></i>
+            Estos tips están diseñados por expertos en skincare. Consulta con un dermatólogo para recomendaciones personalizadas.
+          </p>
+        </div>
+        
+        <div class="footer-actions">
+          <button class="btn btn-outline-primary" (click)="downloadTips()">
+            <i class="fas fa-download me-2"></i>
+            Descargar Tips
+          </button>
+          <button class="btn btn-outline-success" (click)="shareTips()">
+            <i class="fas fa-share me-2"></i>
+            Compartir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
